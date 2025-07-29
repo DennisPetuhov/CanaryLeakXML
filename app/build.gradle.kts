@@ -50,7 +50,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 
-   implementation("com.squareup.leakcanary:leakcanary-android:2.7")
+   implementation("com.squareup.leakcanary:leakcanary-android:2.14")
 //    releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:2.7")
 
 }

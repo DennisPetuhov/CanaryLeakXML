@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.canaryleakxml.databinding.ActivityMainBinding
+import leakcanary.AppWatcher.objectWatcher
 
 class MainActivity : AppCompatActivity() {
    private var binding: ActivityMainBinding? = null
@@ -59,6 +60,15 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity2::class.java)
             startActivity(intent)
         }
+        
+        // Add leak simulation button
+        binding!!.button2.setOnClickListener {
+            simulateLeak()
+        }
+        
+        binding!!.button3.setOnClickListener {
+            clearLeak()
+        }
     }
 
     private inner class InnerClass
@@ -70,4 +80,37 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+}
+
+internal class Cat
+internal class Box {
+    var hiddenCat: Cat? = null
+    
+    constructor(cat: Cat) {
+        this.hiddenCat = cat
+    }
+}
+
+internal object Docker {
+    var container: Box? = null
+}
+
+fun simulateLeak() {
+    val cat = Cat()
+    val box = Box(cat)
+    Docker.container = box
+    objectWatcher.watch(
+        watchedObject = cat,
+        description = "Cat memory leak"
+    )
+}
+
+fun clearLeak() {
+    Docker.container = null
+}
+
+class MemoryLeakExample {
+    private val objectWatcher: leakcanary.ObjectWatcher by lazy {
+        leakcanary.AppWatcher.objectWatcher
+    }
 }
